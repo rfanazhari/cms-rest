@@ -85,6 +85,41 @@ Manage users, publish articles, and track page views with blazing-fast, secure, 
     npm start
     ```
 
+## 🌱 **Database Seeder**
+
+Quickly populate your database with sample data for development and testing:
+
+- **Run Seeder (Development)**
+    ```bash
+    npm run seed
+    ```
+    This will clear existing data and seed the database with sample users, articles, and page views.
+
+- **Run Seeder (Production)**
+    ```bash
+    npm run build
+    npm run seed:prod
+    ```
+
+- **Seeding Options**
+    ```bash
+    # Explicitly clear existing data (default behavior)
+    npm run seed:clear
+    
+    # Keep existing data and add seed data
+    npm run seed:no-clear
+    ```
+
+### Sample Data Created
+
+The seeder creates:
+
+- **Users**: 5 sample users including an admin and regular users (all with password: `password123`, admin: `admin123`)
+- **Articles**: 10 sample articles (mix of published and draft) distributed among users
+- **Page Views**: Random page views for published articles over the last 30 days
+
+This makes it easy to test and develop features without manually creating test data.
+
 ## 📚 **Available API Endpoints**
 
 #### **Authentication**

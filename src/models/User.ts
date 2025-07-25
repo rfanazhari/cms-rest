@@ -5,6 +5,8 @@ import bcrypt from 'bcrypt';
 export interface IUser extends Document {
   name: string;
   username: string;
+  email: string | null;
+  googleId: string | null;
   passwordHash: string;
   createdAt: Date;
   updatedAt: Date;
@@ -25,6 +27,18 @@ const UserSchema: Schema = new Schema(
       unique: true,
       trim: true,
       lowercase: true,
+    },
+    email: {
+      type: String,
+      unique: true,
+      sparse: true, // Allow multiple null values
+      trim: true,
+      lowercase: true,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allow multiple null values
     },
     passwordHash: {
       type: String,

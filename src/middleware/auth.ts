@@ -29,9 +29,11 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
     
     const token = authHeader.replace('Bearer ', '');
-    
+    console.log(`Token ${token}`);
     // Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+
+    console.log(decoded);
     
     // Find user by id
     const user = await User.findById(decoded.id);
