@@ -13,7 +13,7 @@ declare global {
 }
 
 // JWT Secret from environment variables
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_here';
+const JWT_SECRET: string = process.env.JWT_SECRET || 'your_jwt_secret_key_here';
 
 /**
  * Authentication middleware
@@ -81,7 +81,12 @@ export const isOwner = (getResourceUserId: (req: Request) => Promise<string>) =>
  * @returns JWT token
  */
 export const generateToken = (userId: string): string => {
+  // Get expiresIn from environment or use default
   const expiresIn = process.env.JWT_EXPIRES_IN || '1d';
   
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn });
+  // Create the payload
+  const payload = { id: userId };
+  
+  // Use type assertion to bypass TypeScript's type checking
+  return jwt.sign(payload, JWT_SECRET as any, { expiresIn } as any);
 };

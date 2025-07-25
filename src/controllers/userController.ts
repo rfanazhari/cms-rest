@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import mongoose from 'mongoose';
 import User from '../models/User';
 import { generateToken } from '../middleware/auth';
 
@@ -93,7 +94,9 @@ export const createUser = async (req: Request, res: Response) => {
     await user.save();
     
     // Generate token
-    const token = generateToken(user._id.toString());
+    // Convert _id to string directly without relying on its methods
+    const userId = String(user._id);
+    const token = generateToken(userId);
     
     res.status(201).json({
       message: 'User created successfully',

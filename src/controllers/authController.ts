@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import User from '../models/User';
+import mongoose from 'mongoose';
+import User, { IUser } from '../models/User';
 import { generateToken } from '../middleware/auth';
 
 /**
@@ -27,7 +28,7 @@ export const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
     // Find user by username
-    const user = await User.findOne({ username: username.toLowerCase() });
+    const user = await User.findOne({ username: username.toLowerCase() }) as IUser;
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -41,7 +42,9 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Generate JWT token
-    const token = generateToken(user._id.toString());
+    // Convert _id to string directly without relying on its methods
+    const userId = String(user._id);
+    const token = generateToken(userId);
 
     res.json({
       message: 'Login successful',

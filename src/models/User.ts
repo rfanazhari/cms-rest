@@ -58,7 +58,8 @@ UserSchema.pre('save', async function (next) {
 
   try {
     const salt = await bcrypt.genSalt(10);
-    this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+    // Use type assertion to tell TypeScript that this.passwordHash is a string
+    this.passwordHash = await bcrypt.hash(this.passwordHash as string, salt);
     next();
   } catch (error: any) {
     next(error);
