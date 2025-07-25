@@ -1,0 +1,5 @@
+.idea
+.env
+node_modules
+mongo-init
+MONGODB_INIT_INSTRUCTIONS.md
