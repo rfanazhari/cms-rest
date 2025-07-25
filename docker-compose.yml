@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Node.js API service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cms-rest-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MONGODB_URI=mongodb://fan:lupa_password@mongodb:27017/localDB
+      - JWT_SECRET=your_jwt_secret_key_here
+      - JWT_EXPIRES_IN=1d
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8080
+    depends_on:
+      - mongodb
+    networks:
+      - cms-network
+    volumes:
+      - ./logs:/usr/src/app/logs
+
+  # MongoDB service
+  mongodb:
+    image: mongo:6
+    container_name: cms-mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=fan
+      - MONGO_INITDB_ROOT_PASSWORD=lupa_password
+      - MONGO_INITDB_DATABASE=localDB
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - cms-network
+
+# Volumes
+volumes:
+  mongodb-data:
+    driver: local
+
+# Networks
+networks:
+  cms-network:
+    driver: bridge

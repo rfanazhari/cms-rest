@@ -1,0 +1,447 @@
+{
+  "info": {
+    "name": "CMS REST API",
+    "description": "A RESTful API for a Content Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"johndoe\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with username and password to get JWT token"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Logout (client-side token invalidation)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "User management endpoints",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["user"]
+            },
+            "description": "Get all users (public)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "{{userId}}"]
+            },
+            "description": "Get user by ID (public)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe\",\n    \"username\": \"johndoe\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["user"]
+            },
+            "description": "Create a new user (authenticated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Updated\",\n    \"password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "{{userId}}"]
+            },
+            "description": "Update user (owner only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "{{userId}}"]
+            },
+            "description": "Delete user (owner only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Articles",
+      "description": "Article management endpoints",
+      "item": [
+        {
+          "name": "Get Published Articles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/article?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["article"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get all published articles (public)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Articles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/article/me?status=draft&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["article", "me"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "draft",
+                  "description": "Filter by status (draft or published)"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get user's articles (authenticated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Article by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/article/{{articleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["article", "{{articleId}}"]
+            },
+            "description": "Get article by ID (public for published, authenticated for drafts)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Article",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"My First Article\",\n    \"content\": \"This is the content of my first article.\",\n    \"status\": \"draft\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/article",
+              "host": ["{{baseUrl}}"],
+              "path": ["article"]
+            },
+            "description": "Create a new article (authenticated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Article",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Updated Article Title\",\n    \"content\": \"Updated content of the article.\",\n    \"status\": \"published\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/article/{{articleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["article", "{{articleId}}"]
+            },
+            "description": "Update article (owner only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Article",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/article/{{articleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["article", "{{articleId}}"]
+            },
+            "description": "Delete article (owner only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Page Views",
+      "description": "Page view tracking endpoints",
+      "item": [
+        {
+          "name": "Record Page View",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"article\": \"{{articleId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/page-view",
+              "host": ["{{baseUrl}}"],
+              "path": ["page-view"]
+            },
+            "description": "Record a page view (public)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Page View Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/page-view/count?article={{articleId}}&startAt=2023-01-01T00:00:00Z&endAt=2023-12-31T23:59:59Z",
+              "host": ["{{baseUrl}}"],
+              "path": ["page-view", "count"],
+              "query": [
+                {
+                  "key": "article",
+                  "value": "{{articleId}}",
+                  "description": "Filter by article ID (optional)"
+                },
+                {
+                  "key": "startAt",
+                  "value": "2023-01-01T00:00:00Z",
+                  "description": "Start date (optional)"
+                },
+                {
+                  "key": "endAt",
+                  "value": "2023-12-31T23:59:59Z",
+                  "description": "End date (optional)"
+                }
+              ]
+            },
+            "description": "Get page view count (authenticated)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Page View Aggregation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/page-view/aggregate-date?interval=daily&article={{articleId}}&startAt=2023-01-01T00:00:00Z&endAt=2023-12-31T23:59:59Z",
+              "host": ["{{baseUrl}}"],
+              "path": ["page-view", "aggregate-date"],
+              "query": [
+                {
+                  "key": "interval",
+                  "value": "daily",
+                  "description": "Interval (hourly, daily, monthly)"
+                },
+                {
+                  "key": "article",
+                  "value": "{{articleId}}",
+                  "description": "Filter by article ID (optional)"
+                },
+                {
+                  "key": "startAt",
+                  "value": "2023-01-01T00:00:00Z",
+                  "description": "Start date (optional)"
+                },
+                {
+                  "key": "endAt",
+                  "value": "2023-12-31T23:59:59Z",
+                  "description": "End date (optional)"
+                }
+              ]
+            },
+            "description": "Get page view aggregation by date interval (authenticated)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "user_id_here",
+      "type": "string"
+    },
+    {
+      "key": "articleId",
+      "value": "article_id_here",
+      "type": "string"
+    }
+  ]
+}
