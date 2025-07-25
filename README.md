@@ -175,12 +175,6 @@ docker-compose up
 - **Pre-configured MongoDB**: Collections, performance indexes, sample admin & article.
 - **Turnkey Demo**: Start experimenting *right away*.
 
-See [`MONGODB_INIT_INSTRUCTIONS.md`](MONGODB_INIT_INSTRUCTIONS.md) for manual DB initialization.
-
-## 📄 **License**
-
-MIT — do whatever you want! See the [LICENSE](LICENSE) file.
-
 ## 💡 Ready to supercharge your next web app?
 **Clone, run, and start building today!** 🚀
 
